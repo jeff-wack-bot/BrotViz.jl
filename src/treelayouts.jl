@@ -39,7 +39,7 @@ end
 
 # ── Shared graph plumbing ────────────────────────────────────────────────
 
-function _adj_root_kids(H::Mandelbrot.HubbardTree)
+function _adj_root_kids(H::Mandelbrot.AbstractHubbardTree)
     E, nodes = Mandelbrot.adjlist(H.adj)
     rootindex = findfirst(==(H.criticalpoint), nodes)
     rootindex === nothing &&
@@ -84,7 +84,7 @@ Within each generation, children are ordered using their cyclic position
 in the parent's adjacency list (the same heuristic the original
 `generationposition` used).
 """
-function generation_layout(H::Mandelbrot.HubbardTree)::TreeLayout{Float64}
+function generation_layout(H::Mandelbrot.AbstractHubbardTree)::TreeLayout{Float64}
     E, nodes, rootindex, _ = _adj_root_kids(H)
     n = length(nodes)
 
@@ -134,7 +134,7 @@ This is the naive variant — sibling subtrees are spaced by leaf count, not
 by true contour. Good enough for typical Hubbard trees; a contour-packing
 upgrade can drop in later without changing the interface.
 """
-function reingold_tilford_layout(H::Mandelbrot.HubbardTree)::TreeLayout{Float64}
+function reingold_tilford_layout(H::Mandelbrot.AbstractHubbardTree)::TreeLayout{Float64}
     E, nodes, rootindex, kids = _adj_root_kids(H)
     n = length(nodes)
     x = zeros(Float64, n)

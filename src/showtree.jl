@@ -14,7 +14,10 @@ function _tree_node_labels(nodes, criticalorbit)
 end
 
 function _colored_tree_data(angle::Rational; colorscheme=DEFAULT_TREE_COLORSCHEME)
-    HC = HyperbolicComponent(angle)
+    return _colored_tree_data(HyperbolicComponent(angle); colorscheme)
+end
+
+function _colored_tree_data(HC::HyperbolicComponent; colorscheme=DEFAULT_TREE_COLORSCHEME)
     htree = HC.htree
     (E, nodes) = Mandelbrot.adjlist(htree.adj)
     nodetypes = classify_nodes(nodes, HC)
@@ -36,15 +39,29 @@ end
 
 
 # ============================================================================
-# Embedded Tree Plot (Rational only — requires HyperbolicComponent)
+# Embedded Tree Plot (Rational, AngledInternalAddress or HyperbolicComponent)
 # ============================================================================
 
-function embeddedtreeplot!(ax, angle::Rational;
+embeddedtreeplot!(ax, angle::Rational; kwargs...) =
+    embeddedtreeplot!(ax, HyperbolicComponent(angle); kwargs...)
+
+# `AngledInternalAddress(angle)` does not always recover the limb of `angle`,
+# so an address given explicitly is the reliable way to pick an embedding.
+# Refined the same way as `HyperbolicComponent(::Rational)`.
+function embeddedtreeplot!(ax, AIA::AngledInternalAddress; kwargs...)
+    HC = HyperbolicComponent(OrientedHubbardTree(AIA))
+    for _ in 1:5
+        Mandelbrot.refinetree!(HC)
+    end
+    return embeddedtreeplot!(ax, HC; kwargs...)
+end
+
+function embeddedtreeplot!(ax, HC::HyperbolicComponent;
         show_rays=true, show_julia=true, node_size=10,
         ray_colormap=:rainbow, julia_resolution=20,
         colorscheme=DEFAULT_TREE_COLORSCHEME, show_labels=true)
 
-    HC, htree, EdgeList, Nodes, nodecolors, edgecolorfn = _colored_tree_data(angle; colorscheme)
+    HC, htree, EdgeList, Nodes, nodecolors, edgecolorfn = _colored_tree_data(HC; colorscheme)
     criticalorbit = orbit(htree.criticalpoint)
 
     # Julia set background
@@ -172,10 +189,10 @@ end
 # Convenience functions
 # ============================================================================
 
-function embeddedtreeplot(angle::Rational; kwargs...)
+function embeddedtreeplot(input; kwargs...)
     fig = Figure()
     ax = Axis(fig[1,1])
-    embeddedtreeplot!(ax, angle; kwargs...)
+    embeddedtreeplot!(ax, input; kwargs...)
     limits!(ax, -2, 2, -2, 2)
     return fig, ax
 end

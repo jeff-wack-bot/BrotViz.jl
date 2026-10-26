@@ -17,8 +17,3 @@ makedocs(;
         "Mandelbrot and BrotViz development notes" => "notes.md",
     ],
 )
-
-deploydocs(;
-    repo="github.com/jeffwack/BrotViz.jl",
-    devbranch="main",
-)

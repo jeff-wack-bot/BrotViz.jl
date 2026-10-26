@@ -1,2 +1,4 @@
 /Manifest*.toml
 /output/
+/docs/build/
+/docs/Manifest*.toml

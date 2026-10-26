@@ -1,0 +1,9 @@
+[deps]
+BrotViz = "b2afee0e-5ae9-4674-9c86-b31c1a479060"
+CairoMakie = "13f3f980-e62b-5c42-98c6-ff1f3baf88f0"
+Documenter = "e30172f5-a6a5-5a46-863b-614d45cd2de4"
+Mandelbrot = "52854307-bbd1-4ac7-933f-adc0936abe8a"
+
+[sources]
+BrotViz = {path = ".."}
+Mandelbrot = {rev = "main", url = "https://github.com/jeffwack/Mandelbrot.jl.git"}

@@ -10,7 +10,7 @@ Makie = "ee78f7c6-11fb-53f2-987a-cfe4a2b5a57a"
 Mandelbrot = "52854307-bbd1-4ac7-933f-adc0936abe8a"
 
 [sources]
-Mandelbrot = {path = "/home/jeff/.julia/dev/Mandelbrot"}
+Mandelbrot = {url = "https://github.com/jeffwack/Mandelbrot.jl.git"}
 
 [compat]
 ColorSchemes = "3"
